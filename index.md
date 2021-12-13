@@ -18,9 +18,35 @@ Syntax highlighted code block
 
 - Bulleted
 - List
+#import the datasets
+pd.set_option('display.max_columns', None)
+reviews=pd.read_csv("20191226-reviews.csv", encoding='utf-8')
+#print(reviews.info())
+items=pd.read_csv("20191226-items.csv", encoding="utf-8")
+#print(items.info())
+#print(reviews)
 
-1. Numbered
-2. List
+
+#Merging and cleaning the datasets
+reviews.rename(columns={'rating': 'review_rating'},
+          inplace=True, errors='raise')
+#print(reviews.info())
+
+#changing the amazon product code to a number
+labelEncoder = LabelEncoder()
+labelEncoder.fit(reviews['asin'])
+reviews = pd.merge(reviews, items, how="left", left_on="asin", right_on="asin")
+print(reviews.info())
+#print(reviews.shape)
+
+reviews.drop(['name', 'date', 'image'], axis = 1, inplace = True)
+reviews['asin'] = labelEncoder.transform(reviews['asin'])
+#print(reviews.info())
+#print(reviews.shape)
+reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0 if x==3 else -1))
+reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
+print(reviews.sort_values(by=["totalReviews"]) )
+
 
 **Bold** and _Italic_ and `Code` text
 
