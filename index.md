@@ -52,6 +52,7 @@ reviews['asin'] = labelEncoder.transform(reviews['asin'])
 print(reviews.info())
 ```
 This resulted in the following dataset
+
 ![image](https://user-images.githubusercontent.com/42933199/145965597-ae30b689-0ba4-4910-9e36-25573216676f.png)
 After this, two new features were created. One that told us if a review was helpful by checking how many helfull votes it had. the other feauture checked if the review was positive or not depending on the amount of stars that the review had.
 
@@ -62,6 +63,7 @@ reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if
 print(reviews.sort_values(by=["totalReviews"]) )
 ```
 This gave us an easy way to see if a review was positive or negative and how helpful people thought it was.
+
 ![image](https://user-images.githubusercontent.com/42933199/145968448-f88fa622-af94-4951-8348-f9cc28d42c1f.png)
 
 The next step was to give the "user" a posibility to search for a phone, Here I vectorized the titles for the phones and used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
@@ -101,6 +103,77 @@ index_max = max(range(len(cos_similarity)), key=cos_similarity.__getitem__)
 ```
 
 I got over 92 percent correct when classifying this way, but this was when testing with the same data but split up. So When a real user search for "Iphone 8" The program has a hard time knowing which IPhone it is and can many times take the wrong phone. To get the phone that we want we have to be very wpecific and type it very simliar to what the title is on the Amazon page.
+
+After this the most helpfull reviews for the phone that was searched for are fetched and split into positive and negative ones, this is done by using the features we added earlier (helpful and positivity).
+```python
+#Getting the reviews fo the searched phone (pred)
+reviews = reviews[reviews["asin"]==pred[0]].sort_values(by=["helpfulVotes"])
+
+#getting the most helpfull reviews:
+helpful_reviews=reviews[reviews["helpful"]==2].sort_values(by=["asin"])
+
+#splitting the data up in positive and negative.
+positive_reviews=helpful_reviews[helpful_reviews["positivity"]==1].sort_values(by=["helpfulVotes"])
+negative_reviews = helpful_reviews[helpful_reviews["positivity"]==-1].sort_values(by=["helpfulVotes"])
+
+```
+The series of positive and negative reviews were then converted into text.
+
+```python
+#making the series of reviews to text
+def make_fluent_text(serie):
+    pd.set_option('display.max_colwidth', None)
+    return " ".join(serie.to_string().split())
+
+#positive reviews
+pos_out=make_fluent_text(positive_reviews['body'])
+
+#negative reviews
+neg_out=make_fluent_text(negative_reviews['body'])
+
+```
+
+Two new functions are then created to clean the text and to calculate the word frequency.
+```python
+#Clean the text and delete stopwords and keywords
+stop = set(stopwords.words('english'))
+punc = set(string.punctuation)
+keywords1 = reviews["brand"].apply(lambda x: str(x).lower()).unique().tolist()
+
+keywords1.extend(["like", "new", "work", "good","phone", "arrived", "iphone", "one", "seller", "love", "buy", "work", "back","fully", "advertised", "sent", "first", "one", "got"
+                  , "really", "came", "however", "device", "great", "going", "use", "look", "problem", "go", "note", "·", "get", "see", "need", "still", "want",
+                  "even", "also", "much", "i've", "seem", "two", "mate","10", "2", "better", "way", "issue", "pro", "day", "way", "issue", "galaxy", "never", "3"            
+                  ])
+
+lemma = WordNetLemmatizer()
+def clean_text(text):
+    # Convert the text into lowercase
+    text = str(text).lower()
+    # Split into list
+    wordList = text.split()
+    # Remove punctuation
+    wordList = ["".join(x for x in word if (x=="'")|(x not in punc)) for word in wordList]
+    # Remove stopwords
+    wordList = [word for word in wordList if word not in stop]
+    # Remove other keywords
+    wordList = [word for word in wordList if word not in keywords1]
+    # Lemmatisation
+    wordList = [lemma.lemmatize(word) for word in wordList]
+    return " ".join(wordList)
+
+
+# Calculate the word frequency
+def word_freq_dict(text):
+    # Convert text into word list
+    wordList = str(text).split()
+    # Generate word freq dictionary
+    wordFreqDict = {word: wordList.count(word) for word in wordList}
+    return wordFreqDict
+
+```
+
+
+
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
