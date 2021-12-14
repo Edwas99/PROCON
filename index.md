@@ -52,6 +52,10 @@ print(reviews.sort_values(by=["totalReviews"]) )
 
 [Link](url) and ![Image](src)
 ```
+So this is what the two datsets contained from the begining:
+<img width="293" alt="datasets_start" src="https://user-images.githubusercontent.com/42933199/145963860-faecf510-d814-4d6e-a023-09d2dc511758.PNG">
+
+
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
