@@ -50,6 +50,9 @@ reviews.drop(['name', 'date', 'image'], axis = 1, inplace = True)
 reviews['asin'] = labelEncoder.transform(reviews['asin'])
 print(reviews.info())
 ```
+This resulted in the following dataset
+![image](https://user-images.githubusercontent.com/42933199/145965597-ae30b689-0ba4-4910-9e36-25573216676f.png)
+After this, two new features were created. One that told us if a review was helpful by checking how many helfull votes it had. the other feauture checked if the review was positive or not depending on the amount of stars that the review had.
 
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
