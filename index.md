@@ -27,34 +27,29 @@ items=pd.read_csv("20191226-items.csv", encoding="utf-8")
 print(items.info())
 
 
-#Merging and cleaning the datasets
-reviews.rename(columns={'rating': 'review_rating'},
-          inplace=True, errors='raise')
-#print(reviews.info())
-
-#changing the amazon product code to a number
-labelEncoder = LabelEncoder()
-labelEncoder.fit(reviews['asin'])
-reviews = pd.merge(reviews, items, how="left", left_on="asin", right_on="asin")
-print(reviews.info())
-#print(reviews.shape)
-
-reviews.drop(['name', 'date', 'image'], axis = 1, inplace = True)
-reviews['asin'] = labelEncoder.transform(reviews['asin'])
-#print(reviews.info())
-#print(reviews.shape)
-reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0 if x==3 else -1))
-reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
-print(reviews.sort_values(by=["totalReviews"]) )
-
 
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
 ```
-So this is what the two datsets contained from the begining:
+So this is what the two datsets contained:
 <img width="293" alt="datasets_start" src="https://user-images.githubusercontent.com/42933199/145963860-faecf510-d814-4d6e-a023-09d2dc511758.PNG">
 
+To be easier to work with I merged the datasets, changed some names that were the same, droped some unnecesary columns and changed the Amazon product code to a number using labelEncoder.
+```python
+#Merging and cleaning the datasets
+reviews.rename(columns={'rating': 'review_rating'},
+          inplace=True, errors='raise')
+
+
+#changing the amazon product code to a number
+labelEncoder = LabelEncoder()
+labelEncoder.fit(reviews['asin'])
+reviews = pd.merge(reviews, items, how="left", left_on="asin", right_on="asin")
+reviews.drop(['name', 'date', 'image'], axis = 1, inplace = True)
+reviews['asin'] = labelEncoder.transform(reviews['asin'])
+print(reviews.info())
+```
 
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
