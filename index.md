@@ -33,7 +33,8 @@ print(items.info())
 [Link](url) and ![Image](src)
 ```
 So this is what the two datsets contained:
-<img width="293" alt="datasets_start" src="https://user-images.githubusercontent.com/42933199/145963860-faecf510-d814-4d6e-a023-09d2dc511758.PNG">
+
+![image](https://user-images.githubusercontent.com/42933199/145967637-ba564915-73f3-46c7-a159-423a1400466d.png)
 
 To be easier to work with I merged the datasets, changed some names that were the same, droped some unnecesary columns and changed the Amazon product code to a number using labelEncoder.
 ```python
@@ -54,7 +55,52 @@ This resulted in the following dataset
 ![image](https://user-images.githubusercontent.com/42933199/145965597-ae30b689-0ba4-4910-9e36-25573216676f.png)
 After this, two new features were created. One that told us if a review was helpful by checking how many helfull votes it had. the other feauture checked if the review was positive or not depending on the amount of stars that the review had.
 
+```python
+#Creating two new features, Positivity and helpful
+reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0 if x==3 else -1))
+reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
+print(reviews.sort_values(by=["totalReviews"]) )
+```
+This gave us an easy way to see if a review was positive or negative and how helpful people thought it was.
+![image](https://user-images.githubusercontent.com/42933199/145968448-f88fa622-af94-4951-8348-f9cc28d42c1f.png)
 
+The next step was to give the "user" a posibility to search for a phone, Here I vectorized the titles for the phones and used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
+
+```python
+# Vectorize the titles
+docs_train, docs_test, y_train, y_test = train_test_split(reviews['title_y'], reviews["asin"], test_size = 0.20, random_state = 12)
+vectorizer= CountVectorizer(min_df=2, tokenizer=nltk.word_tokenize, max_features=3000)
+reviews_counts = vectorizer.fit_transform(docs_train)
+
+Tfmer = TfidfTransformer()
+reviews_tfidf = Tfmer.fit_transform(reviews_counts)
+
+searched_phone = [
+    'Samsung Galaxy Note 10+ Plus Factory Unlocked Cell Phone with 512GB (U.S. Warranty)',
+ ]  
+
+phone_vector=vectorizer.transform(searched_phone)
+phone_tfidf=Tfmer.transform(phone_vector)
+
+#Classify the searched phone using SVM
+clf = SGDClassifier(loss='hinge', penalty='l2',alpha=1e-3, random_state=42
+,max_iter=5, tol=None)
+
+clf.fit(reviews_tfidf,y_train)
+
+docs_test_counts = vectorizer.transform(docs_test)
+docs_test_tfidf = Tfmer.transform(docs_test_counts)
+
+y_pred = clf.predict(docs_test_tfidf)
+#print(sklearn.metrics.accuracy_score(y_test, y_pred))
+pred = clf.predict(phone_tfidf)
+
+#Check cos similarity aswell
+cos_similarity = cosine_similarity(reviews_tfidf, phone_tfidf[0])
+index_max = max(range(len(cos_similarity)), key=cos_similarity.__getitem__)
+```
+
+I got over 92 percent correct when classifying this way, but this was when testing with the same data but split up. So When a real user search for "Iphone 8" The program has a hard time knowing which IPhone it is and can many times take the wrong phone. To get the phone that we want we have to be very wpecific and type it very simliar to what the title is on the Amazon page.
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
 ### Jekyll Themes
