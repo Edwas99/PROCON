@@ -9,7 +9,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 The project could be applied for any product, since you can create a PROS&CONS list for anything, however I decided to work with phones in this project. This is because I found a good dataset on Kaggle, which contained one file containing the items (721 phones) and one file which contained 68 000 different reviews  for these phones. For more details about the dataset see [Amazon Cellphone Reviews](https://www.kaggle.com/grikomsn/amazon-cell-phones-reviews/code).
 
 
-```markdown
+
 ```python
 Syntax highlighted code block
 
@@ -22,10 +22,9 @@ Syntax highlighted code block
 #import the datasets
 pd.set_option('display.max_columns', None)
 reviews=pd.read_csv("20191226-reviews.csv", encoding='utf-8')
-#print(reviews.info())
+print(reviews.info())
 items=pd.read_csv("20191226-items.csv", encoding="utf-8")
-#print(items.info())
-#print(reviews)
+print(items.info())
 
 
 #Merging and cleaning the datasets
@@ -52,7 +51,6 @@ print(reviews.sort_values(by=["totalReviews"]) )
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
-```
 ```
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
