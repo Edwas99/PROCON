@@ -171,6 +171,41 @@ def word_freq_dict(text):
     return wordFreqDict
 
 ```
+The last function was a function to create the list of the most common keywords, either good or bad ones and a summary of what people have written about this under each keyword. Before implementing this function I tried out many different extractive summary algorithms but in my case the ones that worked the best was KL-sum and LexRank. These ones gave very good summaries but was pretty different. This is because they work in totally different ways, in short one can say that LexRank is a type of Graph based algorithm that is based on the page rank algorithm. KL-sum on the other hand is a algorithm that tries to create a summary with as small KL-divergence as posible, in this case the KL-divergence is the difference between the unigram distribution of the text and the summary. Down below is the code for the function when KL-sum is used. The only difference when using LexRank is that KL-sum is changed to LexRank in the code. This is because I use the sumy library which contains a lot of different sumarizing algorithms.
+
+
+```python
+def write_out_list(text):
+    x=word_freq_dict(clean_text(text))
+    important_keywords = dict(sorted(x.items(), key=lambda item: item[1], reverse=True)[:5])
+    
+    for x in range(5):
+        important_txt=[sentence + '.' for sentence in str(text).lower().split('.') if list(important_keywords)[x] in sentence]
+        my_parser = PlaintextParser.from_string(important_txt,Tokenizer('english'))
+        kl_summarizer=KLSummarizer()
+        kl_summary=kl_summarizer(my_parser.document,sentences_count=3)
+        print ("\n -" + list(important_keywords)[x]+ ":\n")
+        for sentence in kl_summary:
+            print(sentence)
+
+```
+
+To write out the PROS and CONS for the choosen phone the write_out_list function was called for both the positive and negative reviews.
+```python
+print("\n PROS and CONS of " + reviews[0:1]["title_y"].to_string())
+print("---------------------------------------------------------------------------------------------------------\n")
+text=pos_out
+print("\n PROS:")
+write_out_list(text)
+print("----------------------------------------------------------------------------------------------------------\n")
+text=neg_out
+print("\n CONS:")
+write_out_list(text)
+```
+
+This resulted in the following PROS & CONS list for the searched phone, in this case the Samsung Galaxy Note 10+
+![image](https://user-images.githubusercontent.com/42933199/145978198-60db80bc-308d-4e33-b4d2-06f570fcbe8f.png)
+![image](https://user-images.githubusercontent.com/42933199/145978342-c5fd41fd-1847-4fec-bdc6-0fd08b7edb6c.png)
 
 
 
