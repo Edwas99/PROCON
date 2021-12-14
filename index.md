@@ -1,9 +1,6 @@
 ## Machine Learning project PROCON
 This is a project in the course TNM108 at Linköping University. The name PROCON comes from the main idea of the project, to create PROS&CONS lists based on customer reviews.
 The Idea is to give the user a good overview of a product based on what other people think without having to read through an ocean of good and bad reviews. I think that good written reviews can give good insights about a product. A product can for example have really good specs but if you read the reviews about the product you get to know that it has a lot of bugs and the specs doesn't really matter because of this. Without further explanation lets dive in to how I tried to do this:
-You can use the [editor on GitHub](https://github.com/Edwas99/PROCON/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### The dataset:
 The project could be applied for any product, since you can create a PROS&CONS list for anything, however I decided to work with phones in this project. This is because I found a good dataset on Kaggle, which contained one file containing the items (721 phones) and one file which contained 68 000 different reviews  for these phones. For more details about the dataset see [Amazon Cellphone Reviews](https://www.kaggle.com/grikomsn/amazon-cell-phones-reviews/code).
@@ -35,7 +32,7 @@ print(items.info())
 So this is what the two datsets contained:
 
 ![image](https://user-images.githubusercontent.com/42933199/145967637-ba564915-73f3-46c7-a159-423a1400466d.png)
-
+### Dataset merging and feature extraction
 To be easier to work with I merged the datasets, changed some names that were the same, droped some unnecesary columns and changed the Amazon product code to a number using labelEncoder.
 ```python
 #Merging and cleaning the datasets
@@ -54,6 +51,7 @@ print(reviews.info())
 This resulted in the following dataset
 
 ![image](https://user-images.githubusercontent.com/42933199/145965597-ae30b689-0ba4-4910-9e36-25573216676f.png)
+### New features, Positivity and Helpfull
 After this, two new features were created. One that told us if a review was helpful by checking how many helfull votes it had. the other feauture checked if the review was positive or not depending on the amount of stars that the review had.
 
 ```python
@@ -62,10 +60,10 @@ reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0
 reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
 print(reviews.sort_values(by=["totalReviews"]) )
 ```
-This gave us an easy way to see if a review was positive or negative and how helpful people thought it was.
+This gave us an easy way to see if a review was positive or negative and how helpful people thought it was. The helpful feature also helps us finding the good written reviews.
 
 ![image](https://user-images.githubusercontent.com/42933199/145968448-f88fa622-af94-4951-8348-f9cc28d42c1f.png)
-
+### Search for a product, Vectorization and Classification 
 The next step was to give the "user" a posibility to search for a phone, Here I vectorized the titles for the phones and used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
 
 ```python
@@ -104,6 +102,7 @@ index_max = max(range(len(cos_similarity)), key=cos_similarity.__getitem__)
 
 I got over 92 percent correct when classifying this way, but this was when testing with the same data but split up. So When a real user search for "Iphone 8" The program has a hard time knowing which IPhone it is and can many times take the wrong phone. To get the phone that we want we have to be very wpecific and type it very simliar to what the title is on the Amazon page.
 
+### Using the features helpful and positivity
 After this the most helpfull reviews for the phone that was searched for are fetched and split into positive and negative ones, this is done by using the features we added earlier (helpful and positivity).
 ```python
 #Getting the reviews fo the searched phone (pred)
@@ -117,6 +116,7 @@ positive_reviews=helpful_reviews[helpful_reviews["positivity"]==1].sort_values(b
 negative_reviews = helpful_reviews[helpful_reviews["positivity"]==-1].sort_values(by=["helpfulVotes"])
 
 ```
+
 The series of positive and negative reviews were then converted into text.
 
 ```python
@@ -132,7 +132,7 @@ pos_out=make_fluent_text(positive_reviews['body'])
 neg_out=make_fluent_text(negative_reviews['body'])
 
 ```
-
+### Text processing and word frequency 
 Two new functions are then created to clean the text and to calculate the word frequency.
 ```python
 #Clean the text and delete stopwords and keywords
@@ -171,6 +171,7 @@ def word_freq_dict(text):
     return wordFreqDict
 
 ```
+### Printing the result and calling the functions above
 The last function was a function to create the list of the most common keywords, either good or bad ones and a summary of what people have written about this under each keyword. Before implementing this function I tried out many different extractive summary algorithms but in my case the ones that worked the best was KL-sum and LexRank. These ones gave very good summaries but was pretty different. This is because they work in totally different ways, in short one can say that LexRank is a type of Graph based algorithm that is based on the page rank algorithm. KL-sum on the other hand is a algorithm that tries to create a summary with as small KL-divergence as posible, in this case the KL-divergence is the difference between the unigram distribution of the text and the summary. Down below is the code for the function when KL-sum is used. The only difference when using LexRank is that KL-sum is changed to LexRank in the code. This is because I use the sumy library which contains a lot of different sumarizing algorithms.
 
 
@@ -202,19 +203,14 @@ text=neg_out
 print("\n CONS:")
 write_out_list(text)
 ```
-
+### the result
 This resulted in the following PROS & CONS list for the searched phone, in this case the Samsung Galaxy Note 10+
 ![image](https://user-images.githubusercontent.com/42933199/145978198-60db80bc-308d-4e33-b4d2-06f570fcbe8f.png)
 ![image](https://user-images.githubusercontent.com/42933199/145978342-c5fd41fd-1847-4fec-bdc6-0fd08b7edb6c.png)
 
+### Reflection
+I Think this project was very fun and intressting, it gave me a good insight in different Machine learning, summarizing algorithms and I got to learn how to write some python code. I think that the project could be improved and more part of machine learning could be added. One example is to add sentiment analysis, by adding that many more reviews could be added and the program would not be dependent on ratings from the reviews. another thing that could be improved is the search word classification. The list of keywords that are not important could also be improved, it would be intresting to see if the program could learn which keywords that are overall important and not, from supervised learning. This could perhaps be done with a sumarizing algortihm like lexrank which can handle multi document and redundancy in good way. The biggest problem I encountered in this project was that people can write pretty much anything when reviewing, this resulted in a lot of weird summaries in the begining. The helpfull votes on Amazon helped alot, with this feature the absolute worst reviews could be filtered out. It would have been intresting to implement the code in an App or website, I think that with some improvements the code could be helpfull in some areas. To implement the code on a website in a good way I think that you should scrape the data directly from somewhere, this would make the code much more adaptable.
 
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Edwas99/PROCON/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Information about the project
+The project was done by me, Edwin Friberg, while writing this I study my fourth year in Electronc Design Enginering at LiU. 
