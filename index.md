@@ -209,7 +209,7 @@ This resulted in the following PROS & CONS list for the searched phone, in this 
 ![image](https://user-images.githubusercontent.com/42933199/145978342-c5fd41fd-1847-4fec-bdc6-0fd08b7edb6c.png)
 
 ### Reflection
-I Think this project was very fun and intressting, it gave me a good insight in different Machine learning, summarizing algorithms and I got to learn how to write some python code. I think that the project could be improved and more part of machine learning could be added. One example is to add sentiment analysis, by adding that many more reviews could be added and the program would not be dependent on ratings from the reviews. another thing that could be improved is the search word classification. The list of keywords that are not important could also be improved, it would be intresting to see if the program could learn which keywords that are overall important and not, from supervised learning. This could perhaps be done with a sumarizing algortihm like lexrank which can handle multi document and redundancy in good way. The biggest problem I encountered in this project was that people can write pretty much anything when reviewing, this resulted in a lot of weird summaries in the begining. The helpfull votes on Amazon helped alot, with this feature the absolute worst reviews could be filtered out. It would have been intresting to implement the code in an App or website, I think that with some improvements the code could be helpfull in some areas. To implement the code on a website in a good way I think that you should scrape the data directly from somewhere, this would make the code much more adaptable.
+I Think this project was very fun and intressting, it gave me a good insight in different Machine learning techniques, summarizing algorithms and I got to learn how to write some python code. I think that this project could be improved and more part of machine learning could be added. One example is to add sentiment analysis, by adding that many more reviews could be added and the program would not be dependent on ratings from the reviews. Another thing that could be improved is the search word classification. The list of keywords that are not important could also be improved, it would be intresting to see if the program could learn which keywords that are overall important and not, from supervised learning. This could perhaps be done with a sumarizing algortihm like lexrank which can handle multi document and redundancy in good way. The biggest problem I encountered in this project was that people can write pretty much anything when reviewing, this resulted in a lot of weird summaries in the begining. The helpfull votes on Amazon helped alot, with this feature the absolute worst reviews could be filtered out. It would have been intresting to implement the code in an App or website, I think that with some improvements the code could be helpfull in some areas. I think that if you scrape the data directly from somewhere instead of having a stored dataset, would make the code much more adaptable and the implementation on a website would be much easier. Some other improvements would be: include some reviews from professionals and maybe weight these reviews a bit heavier. A counter for how often a certain keywords was brought up in different reviews could be intresting since this would show not only if it is a common problem but also how common compared to the other pros/cons. A last thing that would be really cool to implement is to create some abstractive sumarisations. 
 
 ### Some insight about the summarization:
 This is what the text looked like for all the positive reviews after the worst reviews had been filtered out. This is the text named pos_out in the code, that the last function is used on, it is then summarized and transformed into the pros and cons list. pro_out:
@@ -218,37 +218,37 @@ This is what the text looked like for all the positive reviews after the worst r
 
 And after the last function it looks like this:
 >
- PROS:
-
- -camera:
-
-', ' there are some issues with the cameras on this phone, like the “night mode” inaccurate pictures, and i also wish they moved the front-facing camera to the side like before (even though the little black camera is small, it’s still noticeable.
-', ' the camera is arguable the best you can get when combined with the stock photo and video editing apps.
-', ' you can even minimize it to just go around the camera punch hole.
-
- -screen:
-
-', ' the beauty of the device is the screen, but it’s the most that kills the battery.
-', ' the screen is the largest you can get currently in the u.
-', ' the extra screen size is not wasted.
-
- -time:
-
-', ' if you don’t have an extension microphone, the phone will use the mics that it has, but not at the same time.
-(i was not using the phone at the time).
-', ' i fully expect it to stand up to the test of time.
-
- -feature:
-
-', ' it’s a small feature, but i believe is one of the most useful to have.
-', ' i didn’t feel the need to use this feature, but it does work.
-', ' and then there is the new your phone feature.
-
- -phone:
-
-(i was not using the phone at the time).
-", ' you can interact with your phone, on the pc.
-', " the phone that's right, this is still a phone.
+> PROS:
+>
+>-camera:
+>
+>', ' there are some issues with the cameras on this phone, like the “night mode” inaccurate pictures, and i also wish they moved the front-facing camera to the side like >before (even though the little black camera is small, it’s still noticeable.
+>', ' the camera is arguable the best you can get when combined with the stock photo and video editing apps.
+>', ' you can even minimize it to just go around the camera punch hole.
+>
+> -screen:
+>
+>', ' the beauty of the device is the screen, but it’s the most that kills the battery.
+>', ' the screen is the largest you can get currently in the u.
+>', ' the extra screen size is not wasted.
+>
+> -time:
+>
+>', ' if you don’t have an extension microphone, the phone will use the mics that it has, but not at the same time.
+>(i was not using the phone at the time).
+>', ' i fully expect it to stand up to the test of time.
+>
+> -feature:
+>
+>', ' it’s a small feature, but i believe is one of the most useful to have.
+>', ' i didn’t feel the need to use this feature, but it does work.
+>', ' and then there is the new your phone feature.
+>
+> -phone:
+>
+>(i was not using the phone at the time).
+>", ' you can interact with your phone, on the pc.
+>', " the phone that's right, this is still a phone.
 
 ### Information about the project
 The project was done by me, Edwin Friberg, while writing this I study my fourth year in Electronc Design Enginering at LiU. 
