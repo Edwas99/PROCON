@@ -1,10 +1,9 @@
 ## Machine Learning project PROCON
-This is a project in the course TNM108 at Linköping University. The name PROCON comes from the main idea of the project, to create PROS&CONS lists based on customer reviews.
-The Idea is to give the user a good overview of a product based on what other people think without having to read through an ocean of good and bad reviews. I think that good written reviews can give good insights about a product. A product can for example have really good specs but if you read the reviews about the product you get to know that it has a lot of bugs and the specs doesn't really matter because of this. Without further explanation lets dive in to how I tried to do this:
+This is a project in the course TNM108 at Linköping University. The name PROCON comes from the main idea of the project, to create PROS & CONS lists based on customer reviews.
+The idea is to give the user a good overview of a product based on what other people think without having to read through an ocean of good and bad reviews. I think that well-written reviews can give good insights into a product. An example where reviews can be helpful is when a product has fantastic specs but if you read the reviews about the product, you get to know that it has a lot of bugs and the specs don't matter because of this. Without further explanation, let's dive into how I tried to do this:
 
 ### The dataset:
-The project could be applied for any product, since you can create a PROS&CONS list for anything, however I decided to work with phones in this project. This is because I found a good dataset on Kaggle, which contained one file containing the items (721 phones) and one file which contained 68 000 different reviews  for these phones. For more details about the dataset see [Amazon Cellphone Reviews](https://www.kaggle.com/grikomsn/amazon-cell-phones-reviews/code).
-
+The project could be applied to any product since you can create a PROS&CONS list for anything, however, I decided to work with phones in this project. I choose to work with mobile phones because I found a suitable dataset on Kaggle with Amazon reviews of a lot of phones. The dataset contained two files, one file containing the items (721 phones) and one file which contained 68 000 different reviews for these phones. For more details about the dataset, see [Amazon Cellphone Reviews](https://www.kaggle.com/grikomsn/amazon-cell-phones-reviews/code).
 
 
 ```python
@@ -33,7 +32,7 @@ So this is what the two datsets contained:
 
 ![image](https://user-images.githubusercontent.com/42933199/145967637-ba564915-73f3-46c7-a159-423a1400466d.png)
 ### Dataset merging and feature extraction
-To be easier to work with I merged the datasets, changed some names that were the same, droped some unnecesary columns and changed the Amazon product code to a number using labelEncoder.
+To be easier to work with, I merged the datasets, changed some names that were the same, dropped some unnecessary columns, and changed the Amazon product code to a number using labelEncoder.
 ```python
 #Merging and cleaning the datasets
 reviews.rename(columns={'rating': 'review_rating'},
@@ -51,11 +50,11 @@ print(reviews.info())
 This resulted in the following dataset
 
 ![image](https://user-images.githubusercontent.com/42933199/145965597-ae30b689-0ba4-4910-9e36-25573216676f.png)
-### New features, Positivity and Helpfull
-After this, two new features were created. One that told us if a review was helpful by checking how many helfull votes it had. the other feauture checked if the review was positive or not depending on the amount of stars that the review had.
+### New features, Positivity and Helpful
+After this, two new features were created. One that told us if a review was helpful by checking how many helpful votes it had. The other feature checked if the review was positive or not, depending on the number of stars that the review had.
 
 ```python
-#Creating two new features, Positivity and helpful
+#Creating two new features, positivity and helpful
 reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0 if x==3 else -1))
 reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
 print(reviews.sort_values(by=["totalReviews"]) )
@@ -64,7 +63,7 @@ This gave us an easy way to see if a review was positive or negative and how hel
 
 ![image](https://user-images.githubusercontent.com/42933199/145968448-f88fa622-af94-4951-8348-f9cc28d42c1f.png)
 ### Search for a product, Vectorization and Classification 
-The next step was to give the "user" a posibility to search for a phone, Here I vectorized the titles for the phones and used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
+The next step was to give the "user" a posibility to search for a phone or in a more general case search for a product. In the code it was mostly implemented to give an idea of how the program works, but if the program would be implemented on a website or an app, this would be the search function. When using the search function it would be suggested to the user to give all necesary info like brand, model, special edition and color. An example of this is if the user search for "iphone 13 pro max 256gb gold", the possiblity for the program to find the right product is much higher than compared to if the user only searches for "Iphone" or "iPhone 256gb". To make the search function I vectorized all the titles and the searched phone then I used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
 
 ```python
 # Vectorize the titles
