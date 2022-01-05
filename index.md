@@ -1,4 +1,4 @@
-## By Edwin Friberg | Electronic Design engineering student | JAN 5 2022 | 10 min read  
+### By Edwin Friberg | JAN 5 2022 | 10 min read  
 
 
 ## Machine Learning project PROCON
