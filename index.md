@@ -19,11 +19,6 @@ print(reviews.info())
 items=pd.read_csv("20191226-items.csv", encoding="utf-8")
 print(items.info())
 
-
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 So this is what the two datsets contained:
 
