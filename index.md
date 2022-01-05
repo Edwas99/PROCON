@@ -11,14 +11,7 @@ The project could be applied to any product since you can create a PROS&CONS lis
 
 
 ```python
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
 #import the datasets
 pd.set_option('display.max_columns', None)
 reviews=pd.read_csv("20191226-reviews.csv", encoding='utf-8')
