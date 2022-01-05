@@ -1,7 +1,8 @@
-### By Edwin Friberg | JAN 5 2022 | 10 min read  
-
 
 ## Machine Learning project PROCON
+
+### By Edwin Friberg | JAN 5 2022 | 10 min read  
+
 This is a project in the course TNM108 at Linköping University. The name PROCON comes from the main idea of the project, to create PROS & CONS lists based on customer reviews.
 The idea is to give the user a good overview of a product based on what other people think without having to read through an ocean of good and bad reviews. I think that well-written reviews can give good insights into a product. An example where reviews can be helpful is when a product has fantastic specs but if you read the reviews about the product, you get to know that it has a lot of bugs and the specs don't matter because of this. Without further explanation, let's dive into how I tried to do this:
 
