@@ -59,11 +59,11 @@ reviews["positivity"] = reviews["review_rating"].apply(lambda x: 1 if x>3 else(0
 reviews["helpful"] = reviews["helpfulVotes"].apply(lambda x: 2 if x>10 else(1 if x>5 else 0))
 print(reviews.sort_values(by=["totalReviews"]) )
 ```
-This gave us an easy way to see if a review was positive or negative and how helpful people thought it was. The helpful feature also helps us finding the good written reviews.
+This gave us an easy way to see if a review was positive or negative and how helpful people thought it was. The helpful feature also helps us find good written reviews.
 
 ![image](https://user-images.githubusercontent.com/42933199/145968448-f88fa622-af94-4951-8348-f9cc28d42c1f.png)
 ### Search for a product, Vectorization and Classification 
-The next step was to give the "user" a posibility to search for a phone or in a more general case search for a product. In the code it was mostly implemented to give an idea of how the program works, but if the program would be implemented on a website or an app, this would be the search function. When using the search function it would be suggested to the user to give all necesary info like brand, model, special edition and color. An example of this is if the user search for "iphone 13 pro max 256gb gold", the possiblity for the program to find the right product is much higher than compared to if the user only searches for "Iphone" or "iPhone 256gb". To make the search function I vectorized all the titles and the searched phone then I used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity aswell, this often resulted in the same phone as the classifier.
+The next step was to give the "user" a possibility to search for a phone or in a more general case search for a product. In the code, it was mostly implemented to give an idea of how the program works, but if the program would be implemented on a website or an app, this would be the search function. When using the search function it would be suggested to the user to give all necessary info like brand, model, special edition, and color. An example of this is if the user searches for "iPhone 13 pro max 256 GB gold", the possibility for the program to find the right product is much higher than compared to if the user only searches for "iPhone" or "iPhone 256 GB". To make the search function I vectorized all the titles and the searched phone, then I used SGDClassifier (SVM) to classify the searched phone. I tried to look for the right phone using cos similarity as well, this often resulted in the same phone as the classifier.
 
 ```python
 # Vectorize the titles
@@ -99,10 +99,11 @@ cos_similarity = cosine_similarity(reviews_tfidf, phone_tfidf[0])
 index_max = max(range(len(cos_similarity)), key=cos_similarity.__getitem__)
 ```
 
-I got over 92 percent correct when classifying this way, but this was when testing with the same data but split up. So When a real user search for "Iphone 8" The program has a hard time knowing which IPhone it is and can many times take the wrong phone. To get the phone that we want we have to be very wpecific and type it very simliar to what the title is on the Amazon page.
+I got over 92 percent correct when classifying this way, but this was when testing with the same data but split up. So When a real user search for "iPhone 8" The program has a hard time knowing which iPhone it is and can many times take the wrong phone. To get the phone that we want, we have to be very specific and type it similarly to what the title is on the Amazon page.
 
 ### Using the features helpful and positivity
-After this the most helpfull reviews for the phone that was searched for are fetched and split into positive and negative ones, this is done by using the features we added earlier (helpful and positivity).
+After this the most helpful reviews for the phone that were searched for are fetched and split into positive and negative ones, this is done by using the features we added earlier (helpful and positivity).
+
 ```python
 #Getting the reviews fo the searched phone (pred)
 reviews = reviews[reviews["asin"]==pred[0]].sort_values(by=["helpfulVotes"])
@@ -132,7 +133,7 @@ neg_out=make_fluent_text(negative_reviews['body'])
 
 ```
 ### Text processing and word frequency 
-Two new functions are then created to clean the text and to calculate the word frequency.
+Two new functions were then created to clean the text and to calculate the word frequency.
 ```python
 #Clean the text and delete stopwords and keywords
 stop = set(stopwords.words('english'))
@@ -171,8 +172,7 @@ def word_freq_dict(text):
 
 ```
 ### Printing the result and calling the functions above
-The last function was a function to create the list of the most common keywords, either good or bad ones and a summary of what people have written about this under each keyword. Before implementing this function I tried out many different extractive summary algorithms but in my case the ones that worked the best was KL-sum and LexRank. These ones gave very good summaries but was pretty different. This is because they work in totally different ways, in short one can say that LexRank is a type of Graph based algorithm that is based on the page rank algorithm. KL-sum on the other hand is a algorithm that tries to create a summary with as small KL-divergence as posible, in this case the KL-divergence is the difference between the unigram distribution of the text and the summary. Down below is the code for the function when KL-sum is used. The only difference when using LexRank is that KL-sum is changed to LexRank in the code. This is because I use the sumy library which contains a lot of different sumarizing algorithms.
-
+The last function was a function to create the list of the most common keywords, either good or bad ones, and a summary of what people have written about this under each keyword. Before implementing this function I tried out many extractive summary algorithms but in my case, the ones that worked the best were KL-sum and LexRank. These gave very good summaries but were pretty different. This is because they work in totally different ways, in short one can say that LexRank is a type of Graph-based algorithm that is based on the page rank algorithm. KL-sum, on the other hand, is an algorithm that tries to create a summary with as small KL-divergence as possible, in this case, the KL-divergence is the difference between the unigram distribution of the text and the summary. Down below is the code for the function when KL-sum is used. The only difference when using LexRank is that KL-sum is changed to LexRank in the code. This is because I use the sumy library, which contains a lot of different summarizing algorithms.
 
 ```python
 def write_out_list(text):
